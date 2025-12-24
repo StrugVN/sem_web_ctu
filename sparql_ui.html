@@ -169,10 +169,15 @@
             100% { transform: rotate(360deg); }
         }
 
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 15px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 15px;
             background: white;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             border-radius: 8px;
@@ -185,11 +190,14 @@
             padding: 15px;
             text-align: left;
             font-weight: 600;
+            white-space: nowrap;
         }
 
         td {
             padding: 12px 15px;
             border-bottom: 1px solid #e0e0e0;
+            word-break: break-all;
+            max-width: 300px;
         }
 
         tr:hover {
@@ -260,13 +268,19 @@ WHERE {
                 <div class="example-queries">
                     <h3>📝 Example Queries:</h3>
                     <div class="example-query" onclick="loadExample(0)">
-                        <code>SELECT * WHERE { ?s ?p ?o } LIMIT 10</code>
+                        <code>Find movies in a specific country</code>
                     </div>
                     <div class="example-query" onclick="loadExample(1)">
-                        <code>SELECT ?country ?capital WHERE { ?country :capitalName ?capital }</code>
+                        <code>Find movies directed by a specific director</code>
                     </div>
                     <div class="example-query" onclick="loadExample(2)">
-                        <code>SELECT ?movie ?title WHERE { ?movie rdf:type :Movie . ?movie :title ?title }</code>
+                        <code>Find actors who acted in a specific movie</code>
+                    </div>
+                    <div class="example-query" onclick="loadExample(3)">
+                        <code>Find movies having a specific actor</code>
+                    </div>
+                    <div class="example-query" onclick="loadExample(4)">
+                        <code>Search movies by title keyword</code>
                     </div>
                 </div>
             </div>
@@ -277,9 +291,86 @@ WHERE {
 
     <script>
         const examples = [
-            'SELECT * WHERE { ?s ?p ?o } LIMIT 10',
-            'SELECT ?country ?capital WHERE { ?country :capitalName ?capital } LIMIT 20',
-            'SELECT ?movie ?title WHERE { ?movie rdf:type :Movie . ?movie :title ?title } LIMIT 20'
+            `PREFIX mc: <http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT ?title ?country ?director ?actor ?runtime ?releaseDate ?imdbId
+WHERE {
+  ?movie rdf:type mc:Movie .
+  ?movie mc:title ?title .
+  ?movie mc:producedInCountry ?country .
+  OPTIONAL { ?movie mc:hasDirector ?director }
+  OPTIONAL { ?movie mc:hasActor ?actor }
+  OPTIONAL { ?movie mc:runtimeMinutes ?runtime }
+  OPTIONAL { ?movie mc:releaseDate ?releaseDate }
+  OPTIONAL { ?movie mc:imdbId ?imdbId }
+  FILTER(CONTAINS(LCASE(STR(?country)), "united_states"))
+}
+LIMIT 20`,
+            `PREFIX mc: <http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT ?title ?director ?actor ?country ?runtime ?releaseDate ?imdbId
+WHERE {
+  ?movie rdf:type mc:Movie .
+  ?movie mc:title ?title .
+  ?movie mc:hasDirector ?director .
+  OPTIONAL { ?movie mc:hasActor ?actor }
+  OPTIONAL { ?movie mc:producedInCountry ?country }
+  OPTIONAL { ?movie mc:runtimeMinutes ?runtime }
+  OPTIONAL { ?movie mc:releaseDate ?releaseDate }
+  OPTIONAL { ?movie mc:imdbId ?imdbId }
+  FILTER(CONTAINS(LCASE(STR(?director)), "woo"))
+}
+LIMIT 20`,
+            `PREFIX mc: <http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT ?title ?actor ?director ?country ?runtime ?releaseDate ?imdbId
+WHERE {
+  ?movie rdf:type mc:Movie .
+  ?movie mc:title ?title .
+  ?movie mc:hasActor ?actor .
+  OPTIONAL { ?movie mc:hasDirector ?director }
+  OPTIONAL { ?movie mc:producedInCountry ?country }
+  OPTIONAL { ?movie mc:runtimeMinutes ?runtime }
+  OPTIONAL { ?movie mc:releaseDate ?releaseDate }
+  OPTIONAL { ?movie mc:imdbId ?imdbId }
+  FILTER(CONTAINS(LCASE(?title), "tuxedo"))
+}
+LIMIT 20`,
+            `PREFIX mc: <http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT ?title ?actor ?director ?country ?runtime ?releaseDate ?imdbId
+WHERE {
+  ?movie rdf:type mc:Movie .
+  ?movie mc:title ?title .
+  ?movie mc:hasActor ?actor .
+  OPTIONAL { ?movie mc:hasDirector ?director }
+  OPTIONAL { ?movie mc:producedInCountry ?country }
+  OPTIONAL { ?movie mc:runtimeMinutes ?runtime }
+  OPTIONAL { ?movie mc:releaseDate ?releaseDate }
+  OPTIONAL { ?movie mc:imdbId ?imdbId }
+  FILTER(CONTAINS(LCASE(STR(?actor)), "dicaprio"))
+}
+LIMIT 20`,
+            `PREFIX mc: <http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT ?title ?director ?actor ?country ?runtime ?releaseDate ?imdbId
+WHERE {
+  ?movie rdf:type mc:Movie .
+  ?movie mc:title ?title .
+  OPTIONAL { ?movie mc:hasDirector ?director }
+  OPTIONAL { ?movie mc:hasActor ?actor }
+  OPTIONAL { ?movie mc:producedInCountry ?country }
+  OPTIONAL { ?movie mc:runtimeMinutes ?runtime }
+  OPTIONAL { ?movie mc:releaseDate ?releaseDate }
+  OPTIONAL { ?movie mc:imdbId ?imdbId }
+  FILTER(CONTAINS(LCASE(?title), "war"))
+}
+LIMIT 20`
         ];
 
         function loadExample(index) {
@@ -343,7 +434,7 @@ WHERE {
             const variables = data.head.vars;
 
             let html = `<div class="success">✅ Found ${bindings.length} result(s)</div>`;
-            html += '<table><thead><tr>';
+            html += '<div class="table-wrapper"><table><thead><tr>';
             
             variables.forEach(v => {
                 html += `<th>${escapeHtml(v)}</th>`;
@@ -363,7 +454,7 @@ WHERE {
                 html += '</tr>';
             });
 
-            html += '</tbody></table>';
+            html += '</tbody></table></div>';
             resultsDiv.innerHTML = html;
         }
 

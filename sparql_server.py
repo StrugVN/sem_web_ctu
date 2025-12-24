@@ -34,9 +34,10 @@ HTML_INTERFACE = """<!DOCTYPE html>
         button:disabled { background: #ccc; cursor: not-allowed; transform: none; }
         .error { background: #fee; border-left: 4px solid #f44336; padding: 15px; border-radius: 6px; color: #c62828; margin-top: 15px; white-space: pre-wrap; font-size: 13px; }
         .success { background: #e8f5e9; border-left: 4px solid #4caf50; padding: 15px; border-radius: 6px; color: #2e7d32; margin-top: 15px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-radius: 8px; overflow: hidden; }
-        th { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px; text-align: left; font-weight: 600; }
-        td { padding: 12px 15px; border-bottom: 1px solid #e0e0e0; }
+        .table-wrapper { width: 100%; overflow-x: auto; margin-top: 15px; }
+        table { width: 100%; border-collapse: collapse; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-radius: 8px; overflow: hidden; }
+        th { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px; text-align: left; font-weight: 600; white-space: nowrap; }
+        td { padding: 12px 15px; border-bottom: 1px solid #e0e0e0; word-break: break-all; max-width: 300px; }
         tr:hover { background: #f5f5f5; }
         .example-queries { margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 8px; }
         .example-queries h3 { color: #667eea; margin-bottom: 10px; }
@@ -67,22 +68,22 @@ LIMIT 20</textarea>
             </div>
             <div class="example-queries">
                 <h3>📝 Click to load example:</h3>
-                <div class="example-query" onclick="loadExample(0)">Get all movies with titles</div>
-                <div class="example-query" onclick="loadExample(1)">Get movies with actors</div>
-                <div class="example-query" onclick="loadExample(2)">Get movies with directors</div>
-                <div class="example-query" onclick="loadExample(3)">Find longest movies by runtime</div>
-                <div class="example-query" onclick="loadExample(4)">Count total movies</div>
+                <div class="example-query" onclick="loadExample(0)">Find movies in a specific country</div>
+                <div class="example-query" onclick="loadExample(1)">Find movies directed by a specific director</div>
+                <div class="example-query" onclick="loadExample(2)">Find actors who acted in a specific movie</div>
+                <div class="example-query" onclick="loadExample(3)">Find movies having a specific actor</div>
+                <div class="example-query" onclick="loadExample(4)">Search movies by title keyword</div>
             </div>
             <div id="results"></div>
         </div>
     </div>
     <script>
         const examples = [
-            `PREFIX mc: <http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#>\\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\\n\\nSELECT ?movie ?title\\nWHERE {\\n  ?movie rdf:type mc:Movie .\\n  ?movie mc:title ?title .\\n}\\nLIMIT 20`,
-            `PREFIX mc: <http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#>\\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\\n\\nSELECT ?title ?actor\\nWHERE {\\n  ?movie rdf:type mc:Movie .\\n  ?movie mc:title ?title .\\n  ?movie mc:hasActor ?actor .\\n}\\nLIMIT 20`,
-            `PREFIX mc: <http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#>\\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\\n\\nSELECT ?title ?director\\nWHERE {\\n  ?movie rdf:type mc:Movie .\\n  ?movie mc:title ?title .\\n  ?movie mc:hasDirector ?director .\\n}\\nLIMIT 20`,
-            `PREFIX mc: <http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#>\\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\\n\\nSELECT ?title ?runtime\\nWHERE {\\n  ?movie rdf:type mc:Movie .\\n  ?movie mc:title ?title .\\n  ?movie mc:runtimeMinutes ?runtime .\\n}\\nORDER BY DESC(?runtime)\\nLIMIT 20`,
-            `PREFIX mc: <http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#>\\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\\n\\nSELECT (COUNT(?movie) as ?totalMovies)\\nWHERE {\\n  ?movie rdf:type mc:Movie .\\n}`
+            `PREFIX mc: <http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#>\\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\\n\\nSELECT ?title ?country ?director ?actor ?runtime ?releaseDate ?imdbId\\nWHERE {\\n  ?movie rdf:type mc:Movie .\\n  ?movie mc:title ?title .\\n  ?movie mc:producedInCountry ?country .\\n  OPTIONAL { ?movie mc:hasDirector ?director }\\n  OPTIONAL { ?movie mc:hasActor ?actor }\\n  OPTIONAL { ?movie mc:runtimeMinutes ?runtime }\\n  OPTIONAL { ?movie mc:releaseDate ?releaseDate }\\n  OPTIONAL { ?movie mc:imdbId ?imdbId }\\n  FILTER(CONTAINS(LCASE(STR(?country)), "united_states"))\\n}\\nLIMIT 20`,
+            `PREFIX mc: <http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#>\\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\\n\\nSELECT ?title ?director ?actor ?country ?runtime ?releaseDate ?imdbId\\nWHERE {\\n  ?movie rdf:type mc:Movie .\\n  ?movie mc:title ?title .\\n  ?movie mc:hasDirector ?director .\\n  OPTIONAL { ?movie mc:hasActor ?actor }\\n  OPTIONAL { ?movie mc:producedInCountry ?country }\\n  OPTIONAL { ?movie mc:runtimeMinutes ?runtime }\\n  OPTIONAL { ?movie mc:releaseDate ?releaseDate }\\n  OPTIONAL { ?movie mc:imdbId ?imdbId }\\n  FILTER(CONTAINS(LCASE(STR(?director)), "woo"))\\n}\\nLIMIT 20`,
+            `PREFIX mc: <http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#>\\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\\n\\nSELECT ?title ?actor ?director ?country ?runtime ?releaseDate ?imdbId\\nWHERE {\\n  ?movie rdf:type mc:Movie .\\n  ?movie mc:title ?title .\\n  ?movie mc:hasActor ?actor .\\n  OPTIONAL { ?movie mc:hasDirector ?director }\\n  OPTIONAL { ?movie mc:producedInCountry ?country }\\n  OPTIONAL { ?movie mc:runtimeMinutes ?runtime }\\n  OPTIONAL { ?movie mc:releaseDate ?releaseDate }\\n  OPTIONAL { ?movie mc:imdbId ?imdbId }\\n  FILTER(CONTAINS(LCASE(?title), "tuxedo"))\\n}\\nLIMIT 20`,
+            `PREFIX mc: <http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#>\\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\\n\\nSELECT ?title ?actor ?director ?country ?runtime ?releaseDate ?imdbId\\nWHERE {\\n  ?movie rdf:type mc:Movie .\\n  ?movie mc:title ?title .\\n  ?movie mc:hasActor ?actor .\\n  OPTIONAL { ?movie mc:hasDirector ?director }\\n  OPTIONAL { ?movie mc:producedInCountry ?country }\\n  OPTIONAL { ?movie mc:runtimeMinutes ?runtime }\\n  OPTIONAL { ?movie mc:releaseDate ?releaseDate }\\n  OPTIONAL { ?movie mc:imdbId ?imdbId }\\n  FILTER(CONTAINS(LCASE(STR(?actor)), "dicaprio"))\\n}\\nLIMIT 20`,
+            `PREFIX mc: <http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#>\\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\\n\\nSELECT ?title ?director ?actor ?country ?runtime ?releaseDate ?imdbId\\nWHERE {\\n  ?movie rdf:type mc:Movie .\\n  ?movie mc:title ?title .\\n  OPTIONAL { ?movie mc:hasDirector ?director }\\n  OPTIONAL { ?movie mc:hasActor ?actor }\\n  OPTIONAL { ?movie mc:producedInCountry ?country }\\n  OPTIONAL { ?movie mc:runtimeMinutes ?runtime }\\n  OPTIONAL { ?movie mc:releaseDate ?releaseDate }\\n  OPTIONAL { ?movie mc:imdbId ?imdbId }\\n  FILTER(CONTAINS(LCASE(?title), "war"))\\n}\\nLIMIT 20`
         ];
         
         function loadExample(i) { document.getElementById('queryInput').value = examples[i]; }
@@ -104,7 +105,7 @@ LIMIT 20</textarea>
                     resultsDiv.innerHTML = '<div class="success">✅ Query OK but returned no results.</div>';
                     return;
                 }
-                let html = `<div class="success">✅ Found ${data.results.bindings.length} result(s)</div><table><thead><tr>`;
+                let html = `<div class="success">✅ Found ${data.results.bindings.length} result(s)</div><div class="table-wrapper"><table><thead><tr>`;
                 data.head.vars.forEach(v => html += `<th>${v}</th>`);
                 html += '</tr></thead><tbody>';
                 data.results.bindings.forEach(b => {
@@ -112,7 +113,7 @@ LIMIT 20</textarea>
                     data.head.vars.forEach(v => html += `<td>${b[v] ? b[v].value : '-'}</td>`);
                     html += '</tr>';
                 });
-                html += '</tbody></table>';
+                html += '</tbody></table></div>';
                 resultsDiv.innerHTML = html;
             } catch (error) {
                 resultsDiv.innerHTML = `<div class="error">❌ Error:\\n${error.message}</div>`;
