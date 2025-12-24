@@ -1,0 +1,258 @@
+#!/usr/bin/env python3
+"""
+Complete SPARQL Query Server - All-in-one solution
+Run this and open http://localhost:8888 in your browser
+"""
+
+from http.server import HTTPServer, BaseHTTPRequestHandler
+import json
+import urllib.parse
+from rdflib import Graph
+import traceback
+import os
+
+# HTML Interface (embedded)
+HTML_INTERFACE = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPARQL Query Interface</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 12px 12px 0 0; }
+        .header h1 { font-size: 2em; margin-bottom: 10px; }
+        .content { padding: 30px; }
+        label { display: block; font-weight: 600; color: #333; margin-bottom: 10px; font-size: 1.1em; }
+        textarea { width: 100%; min-height: 200px; padding: 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-family: 'Courier New', monospace; font-size: 14px; resize: vertical; }
+        textarea:focus { outline: none; border-color: #667eea; }
+        .controls { display: flex; gap: 15px; margin-top: 15px; flex-wrap: wrap; }
+        button { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px 30px; border-radius: 6px; font-size: 16px; font-weight: 600; cursor: pointer; transition: transform 0.2s; }
+        button:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4); }
+        button:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+        .error { background: #fee; border-left: 4px solid #f44336; padding: 15px; border-radius: 6px; color: #c62828; margin-top: 15px; white-space: pre-wrap; font-size: 13px; }
+        .success { background: #e8f5e9; border-left: 4px solid #4caf50; padding: 15px; border-radius: 6px; color: #2e7d32; margin-top: 15px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-radius: 8px; overflow: hidden; }
+        th { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px; text-align: left; font-weight: 600; }
+        td { padding: 12px 15px; border-bottom: 1px solid #e0e0e0; }
+        tr:hover { background: #f5f5f5; }
+        .example-queries { margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 8px; }
+        .example-queries h3 { color: #667eea; margin-bottom: 10px; }
+        .example-query { background: white; padding: 10px; margin: 5px 0; border-radius: 4px; cursor: pointer; border: 1px solid #e0e0e0; }
+        .example-query:hover { border-color: #667eea; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 SPARQL Query Interface</h1>
+            <p>Query loaded: <strong id="tripleCount">Loading...</strong> triples</p>
+        </div>
+        <div class="content">
+            <label for="queryInput">SPARQL Query:</label>
+            <textarea id="queryInput">PREFIX mc: <http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT ?movie ?title
+WHERE {
+  ?movie rdf:type mc:Movie .
+  ?movie mc:title ?title .
+}
+LIMIT 20</textarea>
+            <div class="controls">
+                <button onclick="runQuery()">▶ Run Query</button>
+                <button onclick="clearResults()">🗑️ Clear</button>
+            </div>
+            <div class="example-queries">
+                <h3>📝 Click to load example:</h3>
+                <div class="example-query" onclick="loadExample(0)">Get all movies with titles</div>
+                <div class="example-query" onclick="loadExample(1)">Get movies with actors</div>
+                <div class="example-query" onclick="loadExample(2)">Get movies with directors</div>
+                <div class="example-query" onclick="loadExample(3)">Find longest movies by runtime</div>
+                <div class="example-query" onclick="loadExample(4)">Count total movies</div>
+            </div>
+            <div id="results"></div>
+        </div>
+    </div>
+    <script>
+        const examples = [
+            `PREFIX mc: <http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#>\\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\\n\\nSELECT ?movie ?title\\nWHERE {\\n  ?movie rdf:type mc:Movie .\\n  ?movie mc:title ?title .\\n}\\nLIMIT 20`,
+            `PREFIX mc: <http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#>\\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\\n\\nSELECT ?title ?actor\\nWHERE {\\n  ?movie rdf:type mc:Movie .\\n  ?movie mc:title ?title .\\n  ?movie mc:hasActor ?actor .\\n}\\nLIMIT 20`,
+            `PREFIX mc: <http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#>\\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\\n\\nSELECT ?title ?director\\nWHERE {\\n  ?movie rdf:type mc:Movie .\\n  ?movie mc:title ?title .\\n  ?movie mc:hasDirector ?director .\\n}\\nLIMIT 20`,
+            `PREFIX mc: <http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#>\\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\\n\\nSELECT ?title ?runtime\\nWHERE {\\n  ?movie rdf:type mc:Movie .\\n  ?movie mc:title ?title .\\n  ?movie mc:runtimeMinutes ?runtime .\\n}\\nORDER BY DESC(?runtime)\\nLIMIT 20`,
+            `PREFIX mc: <http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#>\\nPREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\\n\\nSELECT (COUNT(?movie) as ?totalMovies)\\nWHERE {\\n  ?movie rdf:type mc:Movie .\\n}`
+        ];
+        
+        function loadExample(i) { document.getElementById('queryInput').value = examples[i]; }
+        
+        async function runQuery() {
+            const query = document.getElementById('queryInput').value.trim();
+            const resultsDiv = document.getElementById('results');
+            if (!query) { resultsDiv.innerHTML = '<div class="error">❌ Please enter a query.</div>'; return; }
+            resultsDiv.innerHTML = '<div class="success">⏳ Executing query...</div>';
+            try {
+                const response = await fetch('/sparql', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: 'query=' + encodeURIComponent(query)
+                });
+                if (!response.ok) throw new Error(await response.text());
+                const data = await response.json();
+                if (!data.results.bindings.length) {
+                    resultsDiv.innerHTML = '<div class="success">✅ Query OK but returned no results.</div>';
+                    return;
+                }
+                let html = `<div class="success">✅ Found ${data.results.bindings.length} result(s)</div><table><thead><tr>`;
+                data.head.vars.forEach(v => html += `<th>${v}</th>`);
+                html += '</tr></thead><tbody>';
+                data.results.bindings.forEach(b => {
+                    html += '<tr>';
+                    data.head.vars.forEach(v => html += `<td>${b[v] ? b[v].value : '-'}</td>`);
+                    html += '</tr>';
+                });
+                html += '</tbody></table>';
+                resultsDiv.innerHTML = html;
+            } catch (error) {
+                resultsDiv.innerHTML = `<div class="error">❌ Error:\\n${error.message}</div>`;
+            }
+        }
+        function clearResults() { document.getElementById('results').innerHTML = ''; }
+        
+        // Get triple count
+        fetch('/stats').then(r => r.json()).then(data => {
+            document.getElementById('tripleCount').textContent = data.triples;
+        });
+    </script>
+</body>
+</html>
+"""
+
+# Load the OWL files
+print("Loading OWL files...")
+g = Graph()
+
+owl_files = [
+    'factbook_data.owl',
+    'movies_from_dbpedia.owl',
+    'ontology.owl'
+]
+
+for owl_file in owl_files:
+    if os.path.exists(owl_file):
+        print(f"Loading {owl_file}...")
+        try:
+            g.parse(owl_file, format='xml')
+            print(f"✓ Loaded {owl_file}")
+        except Exception as e:
+            print(f"✗ Error loading {owl_file}: {e}")
+
+print(f"Total triples loaded: {len(g)}")
+
+class SPARQLHandler(BaseHTTPRequestHandler):
+    
+    def send_cors_headers(self):
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+    
+    def do_OPTIONS(self):
+        self.send_response(200)
+        self.send_cors_headers()
+        self.end_headers()
+    
+    def do_GET(self):
+        if self.path == '/' or self.path == '/index.html':
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html; charset=utf-8')
+            self.send_cors_headers()
+            self.end_headers()
+            self.wfile.write(HTML_INTERFACE.encode('utf-8'))
+        elif self.path == '/stats':
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.send_cors_headers()
+            self.end_headers()
+            self.wfile.write(json.dumps({'triples': len(g)}).encode('utf-8'))
+        else:
+            self.send_error(404, "File not found")
+    
+    def do_POST(self):
+        if self.path == '/sparql':
+            try:
+                content_length = int(self.headers['Content-Length'])
+                post_data = self.rfile.read(content_length).decode('utf-8')
+                params = urllib.parse.parse_qs(post_data)
+                query = params.get('query', [''])[0]
+                
+                if not query:
+                    self.send_error(400, "No query provided")
+                    return
+                
+                print(f"\n--- Executing query ---\n{query}\n")
+                results = g.query(query)
+                
+                result_data = {
+                    "head": {"vars": []},
+                    "results": {"bindings": []}
+                }
+                
+                if results:
+                    result_list = list(results)
+                    if result_list:
+                        result_data["head"]["vars"] = [str(var) for var in results.vars]
+                        for row in result_list:
+                            binding = {}
+                            for var in results.vars:
+                                value = row[var]
+                                if value is not None:
+                                    binding[str(var)] = {
+                                        "type": "uri" if hasattr(value, 'n3') and value.n3().startswith('<') else "literal",
+                                        "value": str(value)
+                                    }
+                            result_data["results"]["bindings"].append(binding)
+                
+                print(f"✓ Query returned {len(result_data['results']['bindings'])} results")
+                
+                self.send_response(200)
+                self.send_header('Content-type', 'application/json')
+                self.send_cors_headers()
+                self.end_headers()
+                self.wfile.write(json.dumps(result_data, indent=2).encode('utf-8'))
+                
+            except Exception as e:
+                error_msg = f"Query error: {str(e)}\n\nTraceback:\n{traceback.format_exc()}"
+                print(f"✗ {error_msg}")
+                
+                self.send_response(500)
+                self.send_header('Content-type', 'text/plain')
+                self.send_cors_headers()
+                self.end_headers()
+                self.wfile.write(error_msg.encode('utf-8'))
+        else:
+            self.send_error(404, "Endpoint not found")
+    
+    def log_message(self, format, *args):
+        pass
+
+def run_server(port=8888):
+    server_address = ('0.0.0.0', port)
+    httpd = HTTPServer(server_address, SPARQLHandler)
+    print(f"\n{'='*60}")
+    print(f"🚀 SPARQL Server running at http://localhost:{port}")
+    print(f"{'='*60}\n")
+    print(f"✓ Loaded {len(g)} triples")
+    print(f"\n👉 Open your browser and go to: http://localhost:{port}\n")
+    print(f"Press Ctrl+C to stop the server\n")
+    
+    try:
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        print("\n\n👋 Server stopped.")
+        httpd.shutdown()
+
+if __name__ == '__main__':
+    import sys
+    port = int(sys.argv[1]) if len(sys.argv) > 1 else 8888
+    run_server(port)
