@@ -1155,7 +1155,7 @@
     <mc:hasActor rdf:resource="http://dbpedia.org/resource/Richard_Schiff"/>
     <mc:hasActor rdf:resource="http://dbpedia.org/resource/Dianne_Wiest"/>
     <mc:hasActor rdf:resource="http://dbpedia.org/resource/Laura_Dern"/>
-    <mc:releaseDate rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2002-01-25</mc:releaseDate>
+    <mc:releaseDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2002-01-25</mc:releaseDate>
     <mc:runtimeMinutes rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">132</mc:runtimeMinutes>
   </rdf:Description>
   <rdf:Description rdf:about="http://dbpedia.org/resource/Greg_Pritikin">
@@ -2232,7 +2232,7 @@
     <mc:hasActor rdf:resource="http://dbpedia.org/resource/Brigitte_Nielsen"/>
     <mc:hasActor rdf:resource="http://dbpedia.org/resource/Alessandra_Martines"/>
     <mc:hasActor rdf:resource="http://dbpedia.org/resource/Remo_Girone"/>
-    <mc:releaseDate rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">1996-11-23</mc:releaseDate>
+    <mc:releaseDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">1996-11-23</mc:releaseDate>
   </rdf:Description>
   <rdf:Description rdf:about="http://dbpedia.org/resource/Karl_Hess">
     <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Actor"/>
@@ -2821,7 +2821,7 @@
     <mc:hasActor rdf:resource="http://dbpedia.org/resource/Kei_Tani"/>
     <mc:hasActor rdf:resource="http://dbpedia.org/resource/Arata_Iura"/>
     <mc:producedInCountry rdf:resource="http://dbpedia.org/resource/Japan"/>
-    <mc:releaseDate rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">1999-04-17</mc:releaseDate>
+    <mc:releaseDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">1999-04-17</mc:releaseDate>
     <mc:runtimeMinutes rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">118</mc:runtimeMinutes>
   </rdf:Description>
   <rdf:Description rdf:about="http://dbpedia.org/resource/Jacques_Rivette">
@@ -2862,7 +2862,7 @@
     <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Movie"/>
     <mc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The Path to 9/11</mc:title>
     <mc:hasDirector rdf:resource="http://dbpedia.org/resource/David_L._Cunningham"/>
-    <mc:releaseDate rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2006-09-10</mc:releaseDate>
+    <mc:releaseDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2006-09-10</mc:releaseDate>
     <mc:runtimeMinutes rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">240</mc:runtimeMinutes>
   </rdf:Description>
   <rdf:Description rdf:about="http://dbpedia.org/resource/The_Tramp_(film)">
@@ -5376,7 +5376,7 @@
     <mc:hasDirector rdf:resource="http://dbpedia.org/resource/Frank_Tashlin"/>
     <mc:hasDirector rdf:resource="http://dbpedia.org/resource/Friz_Freleng"/>
     <mc:hasActor rdf:resource="http://dbpedia.org/resource/Mel_Blanc"/>
-    <mc:releaseDate rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">1943-06-28</mc:releaseDate>
+    <mc:releaseDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">1943-06-28</mc:releaseDate>
     <mc:runtimeMinutes rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">240</mc:runtimeMinutes>
   </rdf:Description>
   <rdf:Description rdf:about="http://dbpedia.org/resource/Jena_Malone">
@@ -5913,7 +5913,7 @@
   <rdf:Description rdf:about="http://dbpedia.org/resource/Fascist_Legacy">
     <rdf:type rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Movie"/>
     <mc:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Fascist Legacy</mc:title>
-    <mc:releaseDate rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">1989-11-01</mc:releaseDate>
+    <mc:releaseDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">1989-11-01</mc:releaseDate>
     <mc:runtimeMinutes rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">50</mc:runtimeMinutes>
     <mc:imdbId rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1597615</mc:imdbId>
   </rdf:Description>
@@ -7417,7 +7417,7 @@
     <mc:hasActor rdf:resource="http://dbpedia.org/resource/Veniamin_Smekhov"/>
     <mc:hasActor rdf:resource="http://dbpedia.org/resource/Mikhail_Boyarsky"/>
     <mc:producedInCountry rdf:resource="http://dbpedia.org/resource/Soviet_Union"/>
-    <mc:releaseDate rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">1978-12-24</mc:releaseDate>
+    <mc:releaseDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">1978-12-24</mc:releaseDate>
     <mc:runtimeMinutes rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">248</mc:runtimeMinutes>
   </rdf:Description>
   <rdf:Description rdf:about="http://dbpedia.org/resource/The_Beast_of_Babylon_Against_the_Son_of_Hercules">
@@ -11785,7 +11785,7 @@
     <mc:hasActor rdf:resource="http://dbpedia.org/resource/Elisabeth_Trissenaar"/>
     <mc:hasActor rdf:resource="http://dbpedia.org/resource/Gottfried_John"/>
     <mc:hasActor rdf:resource="http://dbpedia.org/resource/Hanna_Schygulla"/>
-    <mc:releaseDate rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">1980-10-12</mc:releaseDate>
+    <mc:releaseDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">1980-10-12</mc:releaseDate>
     <mc:runtimeMinutes rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">894</mc:runtimeMinutes>
   </rdf:Description>
   <rdf:Description rdf:about="http://dbpedia.org/resource/Werner_Pochath">
@@ -12374,7 +12374,7 @@
     <mc:hasActor rdf:resource="http://dbpedia.org/resource/Winona_Ryder"/>
     <mc:hasActor rdf:resource="http://dbpedia.org/resource/Christian_Slater"/>
     <mc:hasActor rdf:resource="http://dbpedia.org/resource/Shannen_Doherty"/>
-    <mc:releaseDate rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">1988-10-24</mc:releaseDate>
+    <mc:releaseDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date">1988-10-24</mc:releaseDate>
     <mc:runtimeMinutes rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">103</mc:runtimeMinutes>
   </rdf:Description>
   <rdf:Description rdf:about="http://dbpedia.org/resource/William_Cameron_Menzies">
