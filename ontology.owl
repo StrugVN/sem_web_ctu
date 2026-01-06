@@ -1,252 +1,250 @@
 <?xml version="1.0"?>
-<Ontology xmlns="http://www.w3.org/2002/07/owl#"
-     xml:base="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5"
+<rdf:RDF xmlns="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5/"
+     xml:base="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5/"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:xml="http://www.w3.org/XML/1998/namespace"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
-     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-     ontologyIRI="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5">
-    <Prefix name="" IRI="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5/"/>
-    <Prefix name="owl" IRI="http://www.w3.org/2002/07/owl#"/>
-    <Prefix name="rdf" IRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
-    <Prefix name="xml" IRI="http://www.w3.org/XML/1998/namespace"/>
-    <Prefix name="xsd" IRI="http://www.w3.org/2001/XMLSchema#"/>
-    <Prefix name="rdfs" IRI="http://www.w3.org/2000/01/rdf-schema#"/>
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    <owl:Ontology rdf:about="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5"/>
     
-    <Declaration>
-        <Class IRI="#Actor"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#Country"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#Director"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#Genre"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#Language"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#Movie"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#Person"/>
-    </Declaration>
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
     
-    <Declaration>
-        <ObjectProperty IRI="#actedInMovie"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#countryProducesMovie"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#directedMovie"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#hasActor"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#hasDirector"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#hasGenre"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#hasLanguage"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#producedInCountry"/>
-    </Declaration>
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#actedInMovie -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#actedInMovie">
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#hasActor"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Actor"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Movie"/>
+    </owl:ObjectProperty>
     
-    <Declaration>
-        <DataProperty IRI="#abstract"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#areaKm2"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#capital"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#countryName"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#imdbId"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#population"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#releaseDate"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#runtimeMinutes"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#title"/>
-    </Declaration>
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#countryProducesMovie -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#countryProducesMovie">
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#producedInCountry"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Country"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Movie"/>
+    </owl:ObjectProperty>
     
-    <SubClassOf>
-        <Class IRI="#Actor"/>
-        <Class IRI="#Person"/>
-    </SubClassOf>
-    <SubClassOf>
-        <Class IRI="#Director"/>
-        <Class IRI="#Person"/>
-    </SubClassOf>
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#directedMovie -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#directedMovie">
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#hasDirector"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Director"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Movie"/>
+    </owl:ObjectProperty>
     
-    <InverseObjectProperties>
-        <ObjectProperty IRI="#actedInMovie"/>
-        <ObjectProperty IRI="#hasActor"/>
-    </InverseObjectProperties>
-    <InverseObjectProperties>
-        <ObjectProperty IRI="#countryProducesMovie"/>
-        <ObjectProperty IRI="#producedInCountry"/>
-    </InverseObjectProperties>
-    <InverseObjectProperties>
-        <ObjectProperty IRI="#directedMovie"/>
-        <ObjectProperty IRI="#hasDirector"/>
-    </InverseObjectProperties>
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#hasActor -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#hasActor">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Movie"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Actor"/>
+    </owl:ObjectProperty>
     
-    <ObjectPropertyDomain>
-        <ObjectProperty IRI="#actedInMovie"/>
-        <Class IRI="#Actor"/>
-    </ObjectPropertyDomain>
-    <ObjectPropertyDomain>
-        <ObjectProperty IRI="#countryProducesMovie"/>
-        <Class IRI="#Country"/>
-    </ObjectPropertyDomain>
-    <ObjectPropertyDomain>
-        <ObjectProperty IRI="#directedMovie"/>
-        <Class IRI="#Director"/>
-    </ObjectPropertyDomain>
-    <ObjectPropertyDomain>
-        <ObjectProperty IRI="#hasActor"/>
-        <Class IRI="#Movie"/>
-    </ObjectPropertyDomain>
-    <ObjectPropertyDomain>
-        <ObjectProperty IRI="#hasDirector"/>
-        <Class IRI="#Movie"/>
-    </ObjectPropertyDomain>
-    <ObjectPropertyDomain>
-        <ObjectProperty IRI="#hasGenre"/>
-        <Class IRI="#Movie"/>
-    </ObjectPropertyDomain>
-    <ObjectPropertyDomain>
-        <ObjectProperty IRI="#hasLanguage"/>
-        <Class IRI="#Movie"/>
-    </ObjectPropertyDomain>
-    <ObjectPropertyDomain>
-        <ObjectProperty IRI="#producedInCountry"/>
-        <Class IRI="#Movie"/>
-    </ObjectPropertyDomain>
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#hasDirector -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#hasDirector">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Movie"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Director"/>
+    </owl:ObjectProperty>
     
-    <ObjectPropertyRange>
-        <ObjectProperty IRI="#actedInMovie"/>
-        <Class IRI="#Movie"/>
-    </ObjectPropertyRange>
-    <ObjectPropertyRange>
-        <ObjectProperty IRI="#countryProducesMovie"/>
-        <Class IRI="#Movie"/>
-    </ObjectPropertyRange>
-    <ObjectPropertyRange>
-        <ObjectProperty IRI="#directedMovie"/>
-        <Class IRI="#Movie"/>
-    </ObjectPropertyRange>
-    <ObjectPropertyRange>
-        <ObjectProperty IRI="#hasActor"/>
-        <Class IRI="#Actor"/>
-    </ObjectPropertyRange>
-    <ObjectPropertyRange>
-        <ObjectProperty IRI="#hasDirector"/>
-        <Class IRI="#Director"/>
-    </ObjectPropertyRange>
-    <ObjectPropertyRange>
-        <ObjectProperty IRI="#hasGenre"/>
-        <Class IRI="#Genre"/>
-    </ObjectPropertyRange>
-    <ObjectPropertyRange>
-        <ObjectProperty IRI="#hasLanguage"/>
-        <Class IRI="#Language"/>
-    </ObjectPropertyRange>
-    <ObjectPropertyRange>
-        <ObjectProperty IRI="#producedInCountry"/>
-        <Class IRI="#Country"/>
-    </ObjectPropertyRange>
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#hasGenre -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#hasGenre">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Movie"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Genre"/>
+    </owl:ObjectProperty>
     
-    <DataPropertyDomain>
-        <DataProperty IRI="#abstract"/>
-        <Class IRI="#Movie"/>
-    </DataPropertyDomain>
-    <DataPropertyDomain>
-        <DataProperty IRI="#areaKm2"/>
-        <Class IRI="#Country"/>
-    </DataPropertyDomain>
-    <DataPropertyDomain>
-        <DataProperty IRI="#capital"/>
-        <Class IRI="#Country"/>
-    </DataPropertyDomain>
-    <DataPropertyDomain>
-        <DataProperty IRI="#countryName"/>
-        <Class IRI="#Country"/>
-    </DataPropertyDomain>
-    <DataPropertyDomain>
-        <DataProperty IRI="#imdbId"/>
-        <Class IRI="#Movie"/>
-    </DataPropertyDomain>
-    <DataPropertyDomain>
-        <DataProperty IRI="#population"/>
-        <Class IRI="#Country"/>
-    </DataPropertyDomain>
-    <DataPropertyDomain>
-        <DataProperty IRI="#releaseDate"/>
-        <Class IRI="#Movie"/>
-    </DataPropertyDomain>
-    <DataPropertyDomain>
-        <DataProperty IRI="#runtimeMinutes"/>
-        <Class IRI="#Movie"/>
-    </DataPropertyDomain>
-    <DataPropertyDomain>
-        <DataProperty IRI="#title"/>
-        <Class IRI="#Movie"/>
-    </DataPropertyDomain>
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#hasLanguage -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#hasLanguage">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Movie"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Language"/>
+    </owl:ObjectProperty>
     
-    <DataPropertyRange>
-        <DataProperty IRI="#abstract"/>
-        <Datatype abbreviatedIRI="xsd:string"/>
-    </DataPropertyRange>
-    <DataPropertyRange>
-        <DataProperty IRI="#areaKm2"/>
-        <Datatype abbreviatedIRI="xsd:decimal"/>
-    </DataPropertyRange>
-    <DataPropertyRange>
-        <DataProperty IRI="#capital"/>
-        <Datatype abbreviatedIRI="xsd:string"/>
-    </DataPropertyRange>
-    <DataPropertyRange>
-        <DataProperty IRI="#countryName"/>
-        <Datatype abbreviatedIRI="xsd:string"/>
-    </DataPropertyRange>
-    <DataPropertyRange>
-        <DataProperty IRI="#imdbId"/>
-        <Datatype abbreviatedIRI="xsd:string"/>
-    </DataPropertyRange>
-    <DataPropertyRange>
-        <DataProperty IRI="#population"/>
-        <Datatype abbreviatedIRI="xsd:integer"/>
-    </DataPropertyRange>
-    <DataPropertyRange>
-        <DataProperty IRI="#releaseDate"/>
-        <Datatype abbreviatedIRI="xsd:dateTime"/>
-    </DataPropertyRange>
-    <DataPropertyRange>
-        <DataProperty IRI="#runtimeMinutes"/>
-        <Datatype abbreviatedIRI="xsd:integer"/>
-    </DataPropertyRange>
-    <DataPropertyRange>
-        <DataProperty IRI="#title"/>
-        <Datatype abbreviatedIRI="xsd:string"/>
-    </DataPropertyRange>
-</Ontology>
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#producedInCountry -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#producedInCountry">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Movie"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Country"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#abstract -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#abstract">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Movie"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#areaKm2 -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#areaKm2">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Country"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#capital -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#capital">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Country"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#countryName -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#countryName">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Country"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#imdbId -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#imdbId">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Movie"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#population -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#population">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Country"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#releaseDate -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#releaseDate">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Movie"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#runtimeMinutes -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#runtimeMinutes">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Movie"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#title -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#title">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Movie"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Actor -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Actor">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Country -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Country"/>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Director -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Director">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Person"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Genre -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Genre"/>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Language -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Language"/>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Movie -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Movie"/>
+    
+
+
+    <!-- http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Person -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/lenovo/ontologies/2025/11/untitled-ontology-5#Person"/>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi -->
+
