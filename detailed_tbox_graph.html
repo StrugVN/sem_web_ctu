@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detailed Movie Ontology TBox Graph</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.26.0/cytoscape.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+        }
+        
+        h1 {
+            margin: 0 0 8px 0;
+            font-size: 2em;
+            font-weight: 400;
+        }
+        
+        .subtitle {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+        
+        #cy {
+            width: 100%;
+            height: 900px;
+            background: #ffffff;
+        }
+        
+        .legend {
+            padding: 25px 30px;
+            background: #f8f9fa;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .legend h3 {
+            margin: 0 0 15px 0;
+            color: #2d3748;
+            font-size: 1.2em;
+            font-weight: 500;
+        }
+        
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .legend-shape {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            border: 2px solid #4a5568;
+            flex-shrink: 0;
+        }
+        
+        .legend-shape.rect {
+            border-radius: 3px;
+        }
+        
+        .legend-shape.ellipse {
+            border-radius: 50%;
+        }
+        
+        .legend-shape.roundrect {
+            border-radius: 8px;
+        }
+        
+        .legend-label {
+            font-size: 0.9em;
+            color: #4a5568;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Movie Ontology - Detailed TBox Graph</h1>
+            <div class="subtitle">Classes, Object Properties, and Data Properties with Domains and Ranges</div>
+        </div>
+        
+        <div id="cy"></div>
+        
+        <div class="legend">
+            <h3>Legend</h3>
+            <div class="legend-grid">
+                <div class="legend-item">
+                    <div class="legend-shape rect" style="background: #ffffff;"></div>
+                    <div class="legend-label">Class</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-shape ellipse" style="background: #ffffff;"></div>
+                    <div class="legend-label">Object Property</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-shape ellipse" style="background: #ffffff;"></div>
+                    <div class="legend-label">Data Property</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-shape roundrect" style="background: #ffffff;"></div>
+                    <div class="legend-label">Data Type (xsd:)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        var cy = cytoscape({
+            container: document.getElementById('cy'),
+            
+            elements: [
+                // Classes
+                { data: { id: 'Person', label: 'Person', type: 'class' } },
+                { data: { id: 'Actor', label: 'Actor', type: 'class' } },
+                { data: { id: 'Director', label: 'Director', type: 'class' } },
+                { data: { id: 'Movie', label: 'Movie', type: 'class' } },
+                { data: { id: 'Country', label: 'Country', type: 'class' } },
+                { data: { id: 'Genre', label: 'Genre', type: 'class' } },
+                { data: { id: 'Language', label: 'Language', type: 'class' } },
+                
+                // Object Properties
+                { data: { id: 'hasActor', label: 'hasActor', type: 'objectProperty' } },
+                { data: { id: 'hasDirector', label: 'hasDirector', type: 'objectProperty' } },
+                { data: { id: 'hasCountry', label: 'producedInCountry', type: 'objectProperty' } },
+                { data: { id: 'hasGenre', label: 'hasGenre', type: 'objectProperty' } },
+                { data: { id: 'hasLanguage', label: 'hasLanguage', type: 'objectProperty' } },
+                { data: { id: 'actedInMovie', label: 'actedInMovie', type: 'objectProperty' } },
+                { data: { id: 'directedMovie', label: 'directedMovie', type: 'objectProperty' } },
+                { data: { id: 'countryProducesMovie', label: 'countryProducesMovie', type: 'objectProperty' } },
+                
+                // Movie Data Properties
+                { data: { id: 'title', label: 'title', type: 'dataProperty' } },
+                { data: { id: 'abstract', label: 'abstract', type: 'dataProperty' } },
+                { data: { id: 'imdbId', label: 'imdbId', type: 'dataProperty' } },
+                { data: { id: 'releaseDate', label: 'releaseDate', type: 'dataProperty' } },
+                { data: { id: 'runtimeMinutes', label: 'runtimeMinutes', type: 'dataProperty' } },
+                
+                // Country Data Properties
+                { data: { id: 'countryName', label: 'countryName', type: 'dataProperty' } },
+                { data: { id: 'capital', label: 'capital', type: 'dataProperty' } },
+                { data: { id: 'population', label: 'population', type: 'dataProperty' } },
+                { data: { id: 'areaKm2', label: 'areaKm2', type: 'dataProperty' } },
+                
+                // Data Types
+                { data: { id: 'xsd_string_1', label: 'xsd: string', type: 'datatype' } },
+                { data: { id: 'xsd_string_2', label: 'xsd: string', type: 'datatype' } },
+                { data: { id: 'xsd_string_3', label: 'xsd: string', type: 'datatype' } },
+                { data: { id: 'xsd_string_4', label: 'xsd: string', type: 'datatype' } },
+                { data: { id: 'xsd_dateTime', label: 'xsd: dateTime', type: 'datatype' } },
+                { data: { id: 'xsd_integer_1', label: 'xsd: integer', type: 'datatype' } },
+                { data: { id: 'xsd_integer_2', label: 'xsd: integer', type: 'datatype' } },
+                { data: { id: 'xsd_decimal', label: 'xsd: decimal', type: 'datatype' } },
+                
+                // Subclass relationships
+                { data: { source: 'Actor', target: 'Person', label: 'subClassOf', type: 'subclass' } },
+                { data: { source: 'Director', target: 'Person', label: 'subClassOf', type: 'subclass' } },
+                
+                // Object Property - Domain relationships (arrow FROM property TO class)
+                { data: { source: 'hasActor', target: 'Movie', label: 'domain', type: 'domain' } },
+                { data: { source: 'hasDirector', target: 'Movie', label: 'domain', type: 'domain' } },
+                { data: { source: 'hasCountry', target: 'Movie', label: 'domain', type: 'domain' } },
+                { data: { source: 'hasGenre', target: 'Movie', label: 'domain', type: 'domain' } },
+                { data: { source: 'hasLanguage', target: 'Movie', label: 'domain', type: 'domain' } },
+                { data: { source: 'actedInMovie', target: 'Actor', label: 'domain', type: 'domain' } },
+                { data: { source: 'directedMovie', target: 'Director', label: 'domain', type: 'domain' } },
+                { data: { source: 'countryProducesMovie', target: 'Country', label: 'domain', type: 'domain' } },
+                
+                // Object Property - Range relationships (arrow FROM property TO class)
+                { data: { source: 'hasActor', target: 'Actor', label: 'range', type: 'range' } },
+                { data: { source: 'hasDirector', target: 'Director', label: 'range', type: 'range' } },
+                { data: { source: 'hasCountry', target: 'Country', label: 'range', type: 'range' } },
+                { data: { source: 'hasGenre', target: 'Genre', label: 'range', type: 'range' } },
+                { data: { source: 'hasLanguage', target: 'Language', label: 'range', type: 'range' } },
+                { data: { source: 'actedInMovie', target: 'Movie', label: 'range', type: 'range' } },
+                { data: { source: 'directedMovie', target: 'Movie', label: 'range', type: 'range' } },
+                { data: { source: 'countryProducesMovie', target: 'Movie', label: 'range', type: 'range' } },
+                
+                // Movie Data Property - Domain relationships (arrow FROM property TO class)
+                { data: { source: 'title', target: 'Movie', label: 'domain', type: 'domain' } },
+                { data: { source: 'abstract', target: 'Movie', label: 'domain', type: 'domain' } },
+                { data: { source: 'imdbId', target: 'Movie', label: 'domain', type: 'domain' } },
+                { data: { source: 'releaseDate', target: 'Movie', label: 'domain', type: 'domain' } },
+                { data: { source: 'runtimeMinutes', target: 'Movie', label: 'domain', type: 'domain' } },
+                
+                // Movie Data Property - Range relationships (arrow FROM property TO type)
+                { data: { source: 'title', target: 'xsd_string_1', label: 'range', type: 'range' } },
+                { data: { source: 'abstract', target: 'xsd_string_2', label: 'range', type: 'range' } },
+                { data: { source: 'imdbId', target: 'xsd_string_3', label: 'range', type: 'range' } },
+                { data: { source: 'releaseDate', target: 'xsd_dateTime', label: 'range', type: 'range' } },
+                { data: { source: 'runtimeMinutes', target: 'xsd_integer_1', label: 'range', type: 'range' } },
+                
+                // Country Data Property - Domain relationships (arrow FROM property TO class)
+                { data: { source: 'countryName', target: 'Country', label: 'domain', type: 'domain' } },
+                { data: { source: 'capital', target: 'Country', label: 'domain', type: 'domain' } },
+                { data: { source: 'population', target: 'Country', label: 'domain', type: 'domain' } },
+                { data: { source: 'areaKm2', target: 'Country', label: 'domain', type: 'domain' } },
+                
+                // Country Data Property - Range relationships (arrow FROM property TO type)
+                { data: { source: 'countryName', target: 'xsd_string_4', label: 'range', type: 'range' } },
+                { data: { source: 'capital', target: 'xsd_string_4', label: 'range', type: 'range' } },
+                { data: { source: 'population', target: 'xsd_integer_2', label: 'range', type: 'range' } },
+                { data: { source: 'areaKm2', target: 'xsd_decimal', label: 'range', type: 'range' } }
+            ],
+            
+            style: [
+                {
+                    selector: 'node',
+                    style: {
+                        'label': 'data(label)',
+                        'text-valign': 'center',
+                        'text-halign': 'center',
+                        'font-size': '11px',
+                        'color': '#2d3748',
+                        'text-wrap': 'wrap',
+                        'text-max-width': '80px',
+                        'border-width': 2,
+                        'border-color': '#4a5568'
+                    }
+                },
+                {
+                    selector: 'node[type="class"]',
+                    style: {
+                        'shape': 'rectangle',
+                        'background-color': '#ffffff',
+                        'width': '90px',
+                        'height': '50px',
+                        'font-weight': 'bold'
+                    }
+                },
+                {
+                    selector: 'node[type="objectProperty"]',
+                    style: {
+                        'shape': 'ellipse',
+                        'background-color': '#ffffff',
+                        'width': '120px',
+                        'height': '50px'
+                    }
+                },
+                {
+                    selector: 'node[type="dataProperty"]',
+                    style: {
+                        'shape': 'ellipse',
+                        'background-color': '#ffffff',
+                        'width': '110px',
+                        'height': '45px'
+                    }
+                },
+                {
+                    selector: 'node[type="datatype"]',
+                    style: {
+                        'shape': 'roundrectangle',
+                        'background-color': '#ffffff',
+                        'width': '85px',
+                        'height': '40px',
+                        'font-size': '10px'
+                    }
+                },
+                {
+                    selector: 'edge',
+                    style: {
+                        'width': 1.5,
+                        'line-color': '#4a5568',
+                        'target-arrow-color': '#4a5568',
+                        'target-arrow-shape': 'triangle',
+                        'curve-style': 'bezier',
+                        'label': 'data(label)',
+                        'font-size': '9px',
+                        'color': '#718096',
+                        'text-rotation': 'autorotate',
+                        'text-margin-y': -8,
+                        'text-background-opacity': 0
+                    }
+                },
+                {
+                    selector: 'edge[type="subclass"]',
+                    style: {
+                        'line-style': 'solid',
+                        'target-arrow-shape': 'triangle',
+                        'line-color': '#4a5568',
+                        'target-arrow-color': '#4a5568',
+                        'width': 2
+                    }
+                },
+                {
+                    selector: 'edge[type="domain"]',
+                    style: {
+                        'line-color': '#4a5568',
+                        'target-arrow-color': '#4a5568'
+                    }
+                },
+                {
+                    selector: 'edge[type="range"]',
+                    style: {
+                        'line-color': '#4a5568',
+                        'target-arrow-color': '#4a5568'
+                    }
+                }
+            ],
+            
+            layout: {
+                name: 'preset',
+                positions: function(node) {
+                    var positions = {
+                        // Top row - Person hierarchy
+                        'Person': { x: 200, y: 100 },
+                        'Actor': { x: 100, y: 200 },
+                        'Director': { x: 300, y: 200 },
+                        
+                        // Center - Movie and its properties
+                        'Movie': { x: 800, y: 400 },
+                        
+                        // Movie object properties (around Movie)
+                        'hasActor': { x: 400, y: 250 },
+                        'hasDirector': { x: 600, y: 250 },
+                        'hasGenre': { x: 1000, y: 250 },
+                        'hasLanguage': { x: 1200, y: 250 },
+                        'hasCountry': { x: 600, y: 550 },
+                        
+                        // Related classes
+                        'Genre': { x: 1000, y: 100 },
+                        'Language': { x: 1200, y: 100 },
+                        'Country': { x: 600, y: 700 },
+                        
+                        // Inverse object properties
+                        'actedInMovie': { x: 400, y: 400 },
+                        'directedMovie': { x: 600, y: 400 },
+                        'countryProducesMovie': { x: 600, y: 800 },
+                        
+                        // Movie data properties - right side
+                        'title': { x: 1000, y: 350 },
+                        'abstract': { x: 1000, y: 420 },
+                        'imdbId': { x: 1000, y: 490 },
+                        'releaseDate': { x: 950, y: 560 },
+                        'runtimeMinutes': { x: 950, y: 630 },
+                        
+                        // Movie data types - far right
+                        'xsd_string_1': { x: 1200, y: 350 },
+                        'xsd_string_2': { x: 1200, y: 420 },
+                        'xsd_string_3': { x: 1200, y: 490 },
+                        'xsd_dateTime': { x: 1150, y: 560 },
+                        'xsd_integer_1': { x: 1150, y: 630 },
+                        
+                        // Country data properties - bottom
+                        'countryName': { x: 300, y: 750 },
+                        'capital': { x: 450, y: 750 },
+                        'population': { x: 750, y: 750 },
+                        'areaKm2': { x: 900, y: 750 },
+                        
+                        // Country data types - bottom
+                        'xsd_string_4': { x: 375, y: 850 },
+                        'xsd_integer_2': { x: 750, y: 850 },
+                        'xsd_decimal': { x: 900, y: 850 }
+                    };
+                    return positions[node.id()];
+                },
+                fit: true,
+                padding: 50
+            }
+        });
+        
+        cy.minZoom(0.3);
+        cy.maxZoom(2.5);
+        
+        // Add panning and zooming
+        cy.on('tap', 'node', function(evt){
+            var node = evt.target;
+            node.style('background-color', '#e2e8f0');
+            setTimeout(function() {
+                node.style('background-color', '#ffffff');
+            }, 300);
+        });
+    </script>
+</body>
+</html>

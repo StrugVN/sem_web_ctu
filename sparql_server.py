@@ -1,9 +1,3 @@
-#!/usr/bin/env python3
-"""
-Complete SPARQL Query Server - All-in-one solution
-Run this and open http://localhost:8888 in your browser
-"""
-
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import json
 import urllib.parse
@@ -11,7 +5,6 @@ from rdflib import Graph
 import traceback
 import os
 
-# HTML Interface (embedded)
 HTML_INTERFACE = """<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -131,7 +124,6 @@ LIMIT 20</textarea>
 </html>
 """
 
-# Load the OWL files
 print("Loading OWL files...")
 g = Graph()
 
@@ -242,16 +234,13 @@ def run_server(port=8888):
     server_address = ('0.0.0.0', port)
     httpd = HTTPServer(server_address, SPARQLHandler)
     print(f"\n{'='*60}")
-    print(f"🚀 SPARQL Server running at http://localhost:{port}")
+    print(f"SPARQL Server running at http://localhost:{port}")
     print(f"{'='*60}\n")
-    print(f"✓ Loaded {len(g)} triples")
-    print(f"\n👉 Open your browser and go to: http://localhost:{port}\n")
-    print(f"Press Ctrl+C to stop the server\n")
     
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
-        print("\n\n👋 Server stopped.")
+        print("\n\nServer stopped.")
         httpd.shutdown()
 
 if __name__ == '__main__':
